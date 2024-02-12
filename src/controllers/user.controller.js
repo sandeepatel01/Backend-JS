@@ -25,7 +25,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 
     // 3. Check if user already exists 
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         $or: [{ username }, { email }]
     })
     // console.log("exists user: ", existedUser);
@@ -33,6 +33,7 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(409, "User with email or username already exists");
     }
 
+    console.log(req.files);
 
     // 4. Check for avatar & coverImage
     const avatarLocalPath = req.files?.avatar[0]?.path;
@@ -54,19 +55,18 @@ const registerUser = asyncHandler(async (req, res) => {
     // console.log("coverImage url: ", coverImage);
 
     if (!avatar) {
-        throw new ApiError(400, "Avatar file is required");
+        throw new ApiError(400, "Avatar file is required !!");
     }
-
 
     // 6. Create user Object [create entry in db] 
     const user = await User.create(
         {
             fullname,
-            username: username.lowerCase(),
+            username: username.toLowerCase(),
             email,
             password,
             avatar: avatar.url,
-            coverImage: coverImage.url
+            coverImage: coverImage?.url || ""
         }
     )
 

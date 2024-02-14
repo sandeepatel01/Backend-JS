@@ -23,7 +23,7 @@ const generateAccessAndRefreshToken = async (userId) => {
             "Something went wrong while generating referesh and access token"
         )
     }
-}
+};
 
 
 // ********** User Register controller ************
@@ -110,7 +110,7 @@ const registerUser = asyncHandler(async (req, res) => {
         new ApiResponse(200, createdUser, "User registered successfully")
     )
 
-})
+});
 
 // ***** User Login controller **************
 const loginUser = asyncHandler(async (req, res) => {
@@ -167,8 +167,12 @@ const loginUser = asyncHandler(async (req, res) => {
             )
         )
 
-})
+});
 
+// ******** User logout controller ************ 
+const logoutUser = asyncHandler(async (req, res) => {
+
+});
 
 export {
     registerUser,

@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/fileUpload.js";
+import { response } from "express";
 
 
 // create function for token generate 
@@ -244,7 +245,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         )
 });
 
-// ************** Update Current Password ******************
+// ************** Update Current Password controoler ******************
 const udatePassword = asyncHandler(async (req, res) => {
 
     const { oldPassword, newPasswprd } = req.body
@@ -272,11 +273,27 @@ const udatePassword = asyncHandler(async (req, res) => {
 
 })
 
+// **************** Get Current User Controller 
+const getCurrentUser = asyncHandler(async (req, res) => {
+
+    return response
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                req.user,
+                "Current User Fetched SuccessFully"
+            )
+        )
+
+})
+
 
 export {
     registerUser,
     loginUser,
     logoutUser,
     refreshAccessToken,
-    udatePassword
+    udatePassword,
+    getCurrentUser
 };

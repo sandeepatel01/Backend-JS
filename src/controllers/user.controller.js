@@ -244,10 +244,39 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         )
 });
 
+// ************** Update Current Password ******************
+const udatePassword = asyncHandler(async (req, res) => {
+
+    const { oldPassword, newPasswprd } = req.body
+
+    // Find User 
+    const user = await User.findById(user?._id);
+
+    // Check Password Validation 
+    const isPasswordCorrect = user.isPassword(oldPassword);
+    if (!isPasswordCorrect) {
+        throw new ApiError(400, "Invalid Old Password");
+    }
+
+    user.password = newPasswprd
+    await user.save({ validateBeforeSave: false });
+
+    // return response 
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200, {}, "Password Update SuccessFully"
+            )
+        )
+
+})
+
 
 export {
     registerUser,
     loginUser,
     logoutUser,
-    refreshAccessToken
+    refreshAccessToken,
+    udatePassword
 };

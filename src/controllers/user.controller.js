@@ -271,7 +271,7 @@ const udatePassword = asyncHandler(async (req, res) => {
             )
         )
 
-})
+});
 
 // **************** Get Current User Controller 
 const getCurrentUser = asyncHandler(async (req, res) => {
@@ -286,7 +286,42 @@ const getCurrentUser = asyncHandler(async (req, res) => {
             )
         )
 
-})
+});
+
+// ******************* Upate User  Account Details  Controller ************** 
+const updateAccountDetails = asyncHandler(async (req, res) => {
+
+    // Access User Information (Data) 
+    const { fullname, email, username } = req.body;
+
+    // Validate 
+    if (!fullname && !email && !username) {
+        throw new ApiError(400, "All fields are Required!")
+    };
+
+    // Find User  && Update Details
+    const user = User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                fullname: fullname,
+                email: email,
+                username: username
+            }
+        },
+        { new: true }
+    ).select("-password");
+
+    // Return Response 
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200, user, "Account details update successfull"
+            )
+        );
+
+});
 
 
 export {
@@ -295,5 +330,6 @@ export {
     logoutUser,
     refreshAccessToken,
     udatePassword,
-    getCurrentUser
+    getCurrentUser,
+    updateAccountDetails
 };

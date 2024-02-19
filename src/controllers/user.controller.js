@@ -3,7 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/fileUpload.js";
-import { response } from "express";
+
 
 
 // create function for token generate 
@@ -276,7 +276,7 @@ const udatePassword = asyncHandler(async (req, res) => {
 // **************** Get Current User Controller 
 const getCurrentUser = asyncHandler(async (req, res) => {
 
-    return response
+    return res
         .status(200)
         .json(
             new ApiResponse(
@@ -358,6 +358,32 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         )
 
 });
+
+// ************* Get User Channel Profile Controller *************
+const getUserChannelProfile = asyncHandler(async (req, res) => {
+
+    const { username } = req.params;
+    if (!username?.trim()) {
+        throw new ApiError(400, "username is missing")
+    };
+
+    // find the channel subscriber 
+    const channel = await User.aggregate([
+        {
+            $match: {
+                username: username?.toLowerCase()
+            }
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "channel"
+            }
+        }
+    ])
+
+})
 
 
 export {

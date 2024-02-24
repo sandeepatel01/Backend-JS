@@ -339,7 +339,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
     const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
-            $ser: {
+            $set: {
                 avatar: avatar.ulr
             }
         },
